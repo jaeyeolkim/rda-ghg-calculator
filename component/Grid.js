@@ -10,6 +10,8 @@ export default {
       selected: 0,
       selectedObject: {},
       defaultValue: null,
+      addValue: null,
+      rowValue: null,
       disabled: false
     }
   },
@@ -24,10 +26,13 @@ export default {
     },
     setSelectedObject() {
       this.selectedObject = this.rowData.options.find(element => element.id === this.selected)
+    },
+    onClickAdd() {
+      this.rowValue = this.defaultValue + this.addValue;
     }
   },
   watch: {
-    selected(value) {
+    selected() {
       this.setSelectedObject();
       this.setDefaultValue();
     }
@@ -50,9 +55,9 @@ export default {
     </div>
     <div class="col ps-0">
       <div class="input-group">
-        <input type="number" class="form-control" placeholder="" aria-describedby="button-addon">
-        <button class="btn btn-outline-secondary" type="button" id="button-addon">추가</button>
-        <input type="text" aria-label="Last name" class="form-control" readonly>
+        <input type="number" class="form-control" placeholder="" aria-describedby="button-addon" v-model="addValue">
+        <button class="btn btn-outline-secondary" type="button" id="button-addon" @click="onClickAdd">추가</button>
+        <input type="text" aria-label="Last name" class="form-control" readonly v-model="rowValue">
       </div>
     </div>
   </div>

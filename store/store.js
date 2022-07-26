@@ -1,4 +1,14 @@
-export const gridRows = [
+const areas = [
+  {id: 0, text: '선택'}, 
+  {id: 1, text: '서울'}, 
+  {id: 2, text: '경기/인천'}, 
+];
+
+export function Areas() {
+  return areas;
+};
+
+const gridRows = [
   {
     rowId: 'A1', group: 'A', label: '1', isLast: false, unit: 'kg',
     options: [
@@ -55,17 +65,6 @@ export function getRowIdsByGroup(group) {
 };
 export function getRowData(rowId) {
   return gridRows.find(element => element.rowId === rowId)
-};
-// export function getOptions(rowId) {
-//   return gridRows.find(element => element.rowId === rowId).options
-// };
-
-export function areas() {
-  return [
-    {id: '0', text: '선택', factor: 0}, 
-    {id: '1', text: '서울', factor: 10}, 
-    {id: '2', text: '경기/인천', factor: 20}, 
-  ]
 };
 
 function getRowsByGroup(group) {
