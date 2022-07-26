@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+  <link rel="icon" type="image/x-icon" href="./static/assets/favicon.ico">
+  <link rel="stylesheet" href="./static/bootstrap-5.1.3/css/bootstrap.min.css">
+  <title>계산기</title><!-- 농산물 온실가스 배출량 산정 계산기 -->
+</head>
+
+<body>
+  <script type="importmap">
+    {
+      "imports": {
+        "vue": "./static/js/vue.esm-browser.js"
+      }
+    }
+  </script>
+  <script type="module">
+    import { createApp } from 'vue';
+    import { getRowIdsByGroup } from './store/store.js';
+    import MyGrid from './component/Grid.js';
+
+    createApp({
+      components: {
+        MyGrid
+      },
+      data: () => ({
+        stepAList: getRowIdsByGroup('A'),
+        stepBList: getRowIdsByGroup('B'),
+        stepCList: getRowIdsByGroup('C'),
+      }),
+    }).mount('#app')
+  </script>
+
+  <script src="./static/bootstrap-5.1.3/js/bootstrap.min.js"></script>
+  <div id="app">
+    <div class="container-fluid p-3">
+      <div class="row mb-3">
+        <div class="col-2 text-wrap bg-secondary rounded">첫 번째</div>
+        <div class="col">
+          <my-grid v-for="rowid in stepAList" :rowid="rowid"></my-grid>
+        </div>
+      </div>
+      <div class="row mb-3">
+        <div class="col-2 text-wrap bg-secondary rounded">두 번째</div>
+        <div class="col">
+          <my-grid v-for="rowid in stepBList" :rowid="rowid"></my-grid>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-2 text-wrap bg-secondary rounded">세 번째</div>
+        <div class="col">
+          <my-grid v-for="rowid in stepCList" :rowid="rowid"></my-grid>
+        </div>
+      </div>
+    </div>
+  </div>
+  </div>
+</body>
+
+</html>
