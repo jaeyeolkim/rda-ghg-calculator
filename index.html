@@ -6,6 +6,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1.0" />
   <link rel="icon" type="image/x-icon" href="./static/assets/favicon.ico">
   <link rel="stylesheet" href="./static/bootstrap-5.1.3/css/bootstrap.min.css">
+  <link rel="stylesheet" href="./static/css/balloon.min.css">
   <link rel="stylesheet" href="./static/css/style.css">
   <title>계산기</title><!-- 농산물 온실가스 배출량 산정 계산기 -->
 </head>
@@ -22,83 +23,78 @@
     import { createApp } from 'vue';
     import { getRowIdsByGroup, Areas } from './store/store.js';
     import AppRow from './component/Grid.js';
+    import AppMain from './component/Main.js';
+    import AppModal from './component/Modal.js';
+    import Big from './static/js/big.mjs';
 
     createApp({
       components: {
-        AppRow
+        AppRow,
+        AppMain,
+        AppModal,
       },
       data: () => ({
         stepAList: getRowIdsByGroup('A'),
         stepBList: getRowIdsByGroup('B'),
         stepCList: getRowIdsByGroup('C'),
+        main: {},
+        ghg: '0',
       }),
-    }).mount('#app')
+      methods: {
+        onGridData(main) {
+          this.main = main;
+        },
+        onAddGhg(rowValue) {
+          const ghgNumber = new Big(Number(this.ghg.replace(/,/gi, ''))).plus(Number(rowValue));
+          this.ghg = Number(ghgNumber.toFixed(0)).toLocaleString();
+        }
+      }
+    }).mount('#app');
   </script>
 
   <script src="./static/bootstrap-5.1.3/js/bootstrap.min.js"></script>
-  <nav class="navbar sticky-top navbar-light bg-light">
-    <div class="container-fluid">
-      <a class="navbar-brand" href="#">Sticky top</a>
-      <button type="button" class="btn-close" aria-label="Close" data-bs-toggle="tooltip" data-bs-placement="bottom"
-        title="닫기"></button>
-    </div>
-  </nav>
   <div id="app">
+    <nav class="navbar sticky-top navbar-light bg-light">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="#">Sticky top</a>
+        <button type="button" class="btn-close" aria-label="🙋‍♂️ Close" data-balloon-pos="down-right"></button>
+      </div>
+    </nav>
     <div class="container-fluid my-3">
-      <div class="row">
-        <div class="col-5">
-          <div class="form-floating">
-            <select class="form-select border-secondary" id="item" aria-label="select">
-              <option selected>선택</option>
-              <option value="1">사과</option>
-              <option value="2">바나나</option>
-              <option value="3">수박</option>
-            </select>
-            <label for="item">아이템</label>
-          </div>
-        </div>
-        <div class="col ps-0">
-          <div class="form-floating">
-            <input type="number" class="form-control border-secondary" id="floatingInput" value="1000"
-              placeholder="input">
-            <label for="floatingInput">아이템 값</label>
-          </div>
-        </div>
-        <div class="col-2 ps-0">
-          <div class="form-floating">
-            <select class="form-select border-secondary" id="itemUnit" aria-label="select">
-              <option value="kg">kg</option>
-              <option value="ton">ton</option>
-            </select>
-            <label for="itemUnit">단위</label>
-          </div>
+      <app-main @grid-data="onGridData"></app-main>
+      <hr>
+      <div class="row mt-2">
+        <div class="d-grid gap-2">
+          <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+            🤔 계산하기
+          </button>
+          <app-modal :ghg="ghg"></app-modal>
         </div>
       </div>
-      <hr>
     </div>
     <div class="container-fluid">
-      <div class="row mb-3 callout callout-primary">
-        <div class="col-1 text-wrap rounded">
+      <div class="row mb-3 callout callout-info">
+        <div class="col-1 text-wrap">
           <h4>첫 번째</h4>단계
         </div>
         <div class="col">
-          <app-row v-for="rowid in stepAList" :rowid="rowid"></app-row>
-        </div>
-      </div>
-      <div class="row mb-3 callout callout-info">
-        <div class="col-1 text-wrap rounded">
-          <h4>두 번째</h4>
-        </div>
-        <div class="col">
-          <app-row v-for="rowid in stepBList" :rowid="rowid"></app-row>
+          <app-row v-for="rowid in stepAList" :rowid="rowid" :main="main" @add-ghg="onAddGhg"></app-row>
         </div>
       </div>
       <div class="row mb-3 callout callout-warning">
-        <div class="col-1 text-wrap rounded">
+        <div class="col-1 text-wrap">
+          <h4>두 번째</h4>
+        </div>
+        <div class="col">
+          <app-row v-for="rowid in stepBList" :rowid="rowid" :main="main"></app-row>
+        </div>
+      </div>
+      <div class="row mb-3 callout callout-danger">
+        <div class="col-1 text-wrap">
           <h4>기타</h4>
         </div>
         <div class="col">
-          <app-row v-for="rowid in stepCList" :rowid="rowid"></app-row>
+          <app-row v-for="rowid in stepCList" :rowid="rowid" :main="main"></app-row>
         </div>
       </div>
     </div>

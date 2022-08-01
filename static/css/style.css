@@ -1,6 +1,6 @@
 .callout {
   padding: 20px;
-  margin: 20px 0;
+  margin: 16px 0;
   border: 1px solid #eee;
   border-left-width: 5px;
   border-radius: 3px;
@@ -59,4 +59,10 @@
 }
 .callout-bdc h4 {
   color: #29527a;
+}
+
+
+.radio-scale-up {
+  transform: scale(1.2);
+  margin-right: 0.2rem;
 }

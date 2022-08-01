@@ -1,18 +1,20 @@
 import { getRowData } from '../store/store.js';
+import Big from '../static/js/big.mjs';
 
 export default {
   props: {
-    rowid: String
+    rowid: String,
+    main: Object,
   },
   data() {
     return {
       rowData: getRowData(this.rowid),
       selected: 0,
-      selectedObject: {},
+      selectedObj: {},
       defaultValue: null,
       addValue: null,
       rowValue: null,
-      disabled: false
+      editable: false,
     }
   },
   computed: {
@@ -22,19 +24,43 @@ export default {
   },
   methods: {
     setDefaultValue() {
-      this.defaultValue = this.selectedObject.defaultValue;
+      this.defaultValue = this.selectedObj.defaultValue;
+      this.setRowValue();
     },
-    setSelectedObject() {
-      this.selectedObject = this.rowData.options.find(element => element.id === this.selected)
+    setRowValue() {
+      if (this.defaultValue === null) {
+        this.rowValue = null;
+        return;
+      }
+      this.rowValueCalculation();
+      this.addGhg();
+    },
+    rowValueCalculation() {
+      const defaultValue = this.defaultValue ? this.defaultValue : 0;
+      const addValue = this.addValue ? this.addValue : 0;
+      const mainFactor = new Big(this.main.item.factor.replace(/,/gi, ''));
+      this.rowValue = Number((mainFactor * (new Big(defaultValue).plus(addValue))).toFixed(0)).toLocaleString();
+    },
+    addGhg() {
+      this.$emit('add-ghg', this.rowValue.replace(/,/gi, ''));
+    },
+    onMainChanged() {
+      this.editable = this.main.picked !== '1'
+    },
+    onSelected() {
+      this.selectedObj = this.rowData.options.find(element => element.id === this.selected)
     },
     onClickAdd() {
-      this.rowValue = this.defaultValue + this.addValue;
+      this.setRowValue();
     }
   },
   watch: {
     selected() {
-      this.setSelectedObject();
+      this.onSelected();
       this.setDefaultValue();
+    },
+    main() {
+      this.onMainChanged();
     }
   },
   template: `
@@ -49,14 +75,14 @@ export default {
     </div>
     <div class="col ps-0">
       <div class="input-group">
-        <input type="number" class="form-control" placeholder="" v-model="defaultValue">
+        <input type="text" class="form-control" placeholder="" v-model="defaultValue" :disabled="editable">
         <span class="input-group-text" style="width: 60px;">{{ rowData.unit }}</span>
       </div>
     </div>
     <div class="col ps-0">
       <div class="input-group">
-        <input type="number" class="form-control" placeholder="" aria-describedby="button-addon" v-model="addValue">
-        <button class="btn btn-outline-secondary" type="button" id="button-addon" @click="onClickAdd">추가</button>
+        <input type="text" class="form-control" placeholder="" aria-describedby="button-addon" v-model="addValue">
+        <button class="btn btn-outline-secondary px-2 rounded-end" type="button" id="button-addon" @click="onClickAdd">추가</button>
         <input type="text" aria-label="Last name" class="form-control" readonly v-model="rowValue">
       </div>
     </div>
