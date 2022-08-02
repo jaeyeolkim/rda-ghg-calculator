@@ -66,3 +66,22 @@
   transform: scale(1.2);
   margin-right: 0.2rem;
 }
+
+.modal-custom-header{
+  height: 48px;
+}
+
+.modal-bg {
+  background: #2596be;
+}
+.modal-text {
+  color: #2596be;
+  text-align: center;
+}
+
+.modal-bg-gradient {
+  /* background: linear-gradient(white, skyblue); */
+  background: #fff;
+  border-radius: 2%;
+  border: 0px;
+}

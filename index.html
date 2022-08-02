@@ -45,19 +45,20 @@
           this.main = main;
         },
         onAddGhg(rowValue) {
-          const ghgNumber = new Big(Number(this.ghg.replace(/,/gi, ''))).plus(Number(rowValue));
-          this.ghg = Number(ghgNumber.toFixed(0)).toLocaleString();
+          const ghgNumValue = new Big(Number(this.ghg.replace(/,/gi, ''))).plus(Number(rowValue));
+          this.ghg = Number(ghgNumValue.toFixed(0)).toLocaleString();
         }
       }
     }).mount('#app');
   </script>
 
   <script src="./static/bootstrap-5.1.3/js/bootstrap.min.js"></script>
+  <script src="./static/js/fontawesome-all.js"></script>
   <div id="app">
     <nav class="navbar sticky-top navbar-light bg-light">
       <div class="container-fluid">
         <a class="navbar-brand" href="#">Sticky top</a>
-        <button type="button" class="btn-close" aria-label="🙋‍♂️ Close" data-balloon-pos="down-right"></button>
+        <button type="button" class="btn-close" aria-label="👋 Close" data-balloon-pos="down-right"></button>
       </div>
     </nav>
     <div class="container-fluid my-3">
@@ -66,7 +67,7 @@
       <div class="row mt-2">
         <div class="d-grid gap-2">
           <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
-            🤔 계산하기
+            <i class="fa-solid fa-calculator"></i> 계산하기
           </button>
           <app-modal :ghg="ghg"></app-modal>
         </div>
