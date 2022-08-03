@@ -9,10 +9,10 @@ export default {
       picked: '1',
       items: Items(),
       item: {},
-      itemId: 0,
+      itemId: '',
       areas: Areas(),
       area: {},
-      areaId: 0,
+      areaId: '',
     }
   },
   created() {

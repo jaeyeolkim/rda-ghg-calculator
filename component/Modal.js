@@ -3,8 +3,8 @@ export default {
     ghg: String
   },
   template: `
-  <div class="modal fade" id="staticBackdrop" data-bs-keyboard="false" tabindex="-1"
-    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal fade" id="resultModal" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="resultModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-width">
       <div class="modal-content rounded">
         <div class="row">
