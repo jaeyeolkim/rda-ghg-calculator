@@ -62,6 +62,10 @@
 }
 
 
+.app-container {
+  max-width: 1024px;
+}
+
 .radio-scale-up {
   transform: scale(1.2);
   margin-right: 0.2rem;
