@@ -1,8 +1,6 @@
 import { Items, Areas } from '../store/store.js';
 
 export default {
-  props: {
-  },
   emits: ['grid-data'],
   data() {
     return {

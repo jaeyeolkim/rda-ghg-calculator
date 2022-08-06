@@ -42,11 +42,11 @@ export default {
       const mainItemFactor = new Big(Utils.uncomma(this.main.item.factor));
       const mainAreaFactor = new Big(Utils.uncomma(this.main.area.factor));
       // @TODO 
-      console.log('mainAreaFactor', mainAreaFactor.toLocaleString())
+      // console.log('mainAreaFactor', mainAreaFactor.toLocaleString())
       this.rowValue = Utils.comma(mainItemFactor * (new Big(defaultValue).plus(addValue)));
     },
     addGhg() {
-      this.$emit('add-ghg', this.rowValue.replace(/,/gi, ''));
+      this.$emit('add-ghg', Utils.uncomma(this.rowValue));
     },
     onMainChanged() {
       this.disabled = !(this.main.item.id && this.main.area.id) || this.main.picked !== '1'
@@ -91,8 +91,9 @@ export default {
       <div class="input-group">
         <input type="text" class="form-control" placeholder="" aria-describedby="button-addon" 
         :id="rowid + '_addValue'" v-model="addValue" :readonly="disabled || !selected" @keyup="onKeyUp">
-        <button class="btn btn-outline-secondary px-2 rounded-end" type="button" id="button-addon" @click="onClickAdd" :disabled="disabled || !selected || !addValue">추가</button>
-        <input type="text" aria-label="Last name" class="form-control" :id="rowid + '_rowValue'" v-model="rowValue" readonly>
+        <button class="btn btn-outline-secondary px-2 rounded-end" type="button" id="button-addon" 
+          @click="onClickAdd" :disabled="disabled || !selected || !addValue">추가</button>
+        <input type="text" aria-label="Last name" class="form-control" :id="rowid + '_rowValue'" name="rowValue" v-model="rowValue" readonly>
       </div>
     </div>
   </div>

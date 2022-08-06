@@ -43,7 +43,7 @@
         invalid: true,
       }),
       mounted() {
-        Utils.formValidThenShowResult('resultModal');
+        Utils.formValidThenShowResult('resultModal', this.onGhgResult);
       },
       methods: {
         onGridData(main) {
@@ -51,8 +51,9 @@
           this.main = main;
         },
         onAddGhg(rowValue) {
-          const ghgNumValue = new Big(Number(this.ghg.replace(/,/gi, ''))).plus(Number(rowValue));
-          this.ghg = Number(ghgNumValue.toFixed(0)).toLocaleString();
+        },
+        onGhgResult(result) {
+          this.ghg = result;
         },
         onClose() {
           window.close();

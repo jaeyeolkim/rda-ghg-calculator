@@ -21,7 +21,7 @@ export default {
             </div>
             <div class="modal-body py-5">
               <div class="modal-text">
-                <h2 class="display-1 lead">{{ ghg }}</h2>
+                <h2 class="display-2 lead">{{ ghg }}</h2>
                 <span class="lead">kgCO2eq</span>
               </div>
             </div>
