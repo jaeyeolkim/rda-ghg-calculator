@@ -1,4 +1,4 @@
-import { getRowData } from '../store/store.js';
+import { getAreas, getRowData, getAreaDistanceByRowAreaId } from '../store/store.js';
 import Big from '../static/js/big.mjs';
 import Utils from '../static/js/utils.js';
 
@@ -10,26 +10,22 @@ export default {
   data() {
     return {
       rowData: getRowData(this.rowid),
-      selected: '',
-      selectedObj: {},
-      defaultValue: null,
+      areas: getAreas(),
+      mainItemFactor: null,
+      distance: '',
       addValue: null,
       rowValue: null,
       disabled: true,
     }
   },
   computed: {
-    myOptions() {
-      return this.rowData.options;
+    myAreaDistance() {
+      return getAreaDistanceByRowAreaId(this.main.area.id)
     }
   },
   methods: {
-    setDefaultValue() {
-      this.defaultValue = this.selectedObj.defaultValue;
-      this.setRowValue();
-    },
     setRowValue() {
-      if (this.defaultValue === null) {
+      if (!this.mainItemFactor || !this.main.valid) {
         this.rowValue = null;
         return;
       }
@@ -37,63 +33,70 @@ export default {
       this.addGhg();
     },
     rowValueCalculation() {
-      const defaultValue = this.defaultValue ? Utils.uncomma(this.defaultValue) : 0;
       const addValue = this.addValue ? Utils.uncomma(this.addValue) : 0;
-      const mainItemFactor = new Big(Utils.uncomma(this.main.item.factor));
-      const mainAreaFactor = new Big(Utils.uncomma(this.main.area.factor));
-      // @TODO 
-      // console.log('mainAreaFactor', mainAreaFactor.toLocaleString())
-      this.rowValue = Utils.comma(mainItemFactor * (new Big(defaultValue).plus(addValue)));
+      const itemInput = this.main.item.itemInput ? Utils.uncomma(this.main.item.itemInput) : 0;
+      const areaInput = this.main.area.areaInput ? Utils.uncomma(this.main.area.areaInput) : 0;
+      let useValue = 0;
+      if (this.rowid === 'C1') {
+        useValue = new Big(this.addValue * (itemInput * 0.001));
+      } else {
+        useValue = new Big(this.mainItemFactor * (areaInput * 0.001)).plus(addValue);
+      }
+      this.rowValue = Utils.comma(new Big(useValue * this.rowData.factorAvg).round(3));
     },
     addGhg() {
       this.$emit('add-ghg', Utils.uncomma(this.rowValue));
     },
     onMainChanged() {
-      this.disabled = !(this.main.item.id && this.main.area.id) || this.main.picked !== '1'
+      this.disabled = !this.main.valid
+      this.mainItemFactor = this.main.item.factors ? this.main.item.factors[this.rowid]: null;
+      this.setRowValue();
     },
-    onSelected() {
-      this.selectedObj = this.rowData.options.find(element => element.id === this.selected)
+    onDistanceSelected() {
+      this.addValue = this.myAreaDistance[this.distance]
     },
     onClickAdd() {
       this.setRowValue();
     },
-    onKeyUp(e) {
-      this.addValue = Utils.numberFormat(this.addValue);
+    onAddValueKeyUp(e) {
+      this.addValue = Utils.comma(this.addValue);
     }
   },
   watch: {
-    selected() {
-      this.onSelected();
-      this.setDefaultValue();
+    distance() {
+      this.onDistanceSelected();
+      this.setRowValue();
     },
     main() {
       this.onMainChanged();
     }
   },
   template: `
-  <div class="row" :class="{ 'mb-2': !rowData.isLast }">
-    <div class="col">
+  <div class="row" :class="{ 'mb-1': !rowData.isLast }">
+    <div class="col-3">
+      <label class="input-group-text bg-light" for="">{{ rowData.label }}</label>
+    </div>
+    <div class="col-6 ps-0">
       <div class="input-group">
-        <label class="input-group-text bg-light" for="" style="width: 5rem;">{{ rowData.label }}</label>
-        <select class="form-select" :id="rowid + '_selected'" v-if="rowData.unit !== 'kWh'" v-model="selected" :disabled="disabled" required>
-          <option v-for="options in myOptions" :key="options.id" :value="options.id">{{ options.text }}</option>
+        <select v-if="rowid === 'C1'" class="form-select" id="distance" v-model="distance" :disabled="disabled" required>
+          <option v-for="area in areas" :key="area.id" :value="area.id">{{ area.text }}</option>
         </select>
-        <div class="invalid-feedback">필수 선택입니다.</div>
+        <!-- <div class="invalid-feedback">필수 선택입니다.</div> -->
+        <input v-else type="text" class="form-control text-end" placeholder="" 
+         :class="{ 'bg-warning bg-opacity-10': mainItemFactor, 'bg-white border-0': rowid === 'B1' }"
+         :id="rowid + '_mainItemFactor'" v-model="mainItemFactor" readonly>
+        <span v-show="rowid !== 'C1'" class="badge bg-white px-1 pt-3 text-secondary" :style="{width: + (rowid === 'B1'? 21: 20) +'px'}">
+          <i v-show="rowid !== 'B1'" class="fa-solid fa-circle-plus"></i>
+        </span>
+        <input type="text" class="form-control text-end" placeholder="" aria-describedby="button-addon" 
+         :id="rowid + '_addValue'" v-model="addValue" :readonly="rowid === 'C1'? true: disabled" @keyup="onAddValueKeyUp">
+        <span class="input-group-text fw-lighter p-2 bg-light" style="width: 3em; font-size: 0.9em;">{{ rowData.unit }}</span>
       </div>
     </div>
-    <div class="col ps-0">
+    <div class="col-3 p-0">
       <div class="input-group">
-        <input type="text" class="form-control" placeholder="" :id="rowid + '_defaultValue'" v-model="defaultValue" readonly>
-        <span class="input-group-text" style="width: 60px;">{{ rowData.unit }}</span>
-      </div>
-    </div>
-    <div class="col ps-0">
-      <div class="input-group">
-        <input type="text" class="form-control" placeholder="" aria-describedby="button-addon" 
-        :id="rowid + '_addValue'" v-model="addValue" :readonly="disabled || !selected" @keyup="onKeyUp">
-        <button class="btn btn-outline-secondary px-2 rounded-end" type="button" id="button-addon" 
-          @click="onClickAdd" :disabled="disabled || !selected || !addValue">추가</button>
-        <input type="text" aria-label="Last name" class="form-control" :id="rowid + '_rowValue'" name="rowValue" v-model="rowValue" readonly>
+        <input type="text" aria-label="Last name" class="form-control text-end" :id="rowid + '_rowValue'" name="rowValue" v-model="rowValue" readonly>
+        <span class="input-group-text fw-lighter p-2 bg-light" style="width: 4em; font-size: 0.9em;">kgCO<sub>2</sub></span>
       </div>
     </div>
   </div>

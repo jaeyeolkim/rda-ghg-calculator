@@ -21,7 +21,7 @@
   </script>
   <script type="module">
     import { createApp } from 'vue';
-    import { getRowIdsByGroup, Areas } from './store/store.js';
+    import { getRowIdsByGroup } from './store/store.js';
     import AppRow from './component/Grid.js';
     import AppMain from './component/Main.js';
     import AppModal from './component/Modal.js';
@@ -40,14 +40,12 @@
         stepCList: getRowIdsByGroup('C'),
         main: {},
         ghg: '0',
-        invalid: true,
       }),
       mounted() {
         Utils.formValidThenShowResult('resultModal', this.onGhgResult);
       },
       methods: {
         onGridData(main) {
-          this.invalid = !(main.item.id && main.area.id);
           this.main = main;
         },
         onAddGhg(rowValue) {
@@ -74,11 +72,12 @@
     </nav>
     <form id="gridForm" class="needs-validation" novalidate>
       <main class="container-fluid my-3">
+        <!-- 유형 선택 -->
         <app-main @grid-data="onGridData"></app-main>
         <hr>
         <div class="row mt-2">
           <div class="d-grid gap-2">
-            <button type="submit" class="btn btn-outline-primary" :disabled="invalid">
+            <button type="submit" class="btn btn-lg btn-outline-primary" :disabled="!main.valid">
               <i class="fa-solid fa-calculator"></i> 계산하기
             </button>
             <app-modal :ghg="ghg"></app-modal>
@@ -86,25 +85,25 @@
         </div>
       </main>
       <section class="container-fluid">
-        <div class="row mb-3 callout callout-info">
-          <div class="col-1 text-wrap">
-            <h4>첫 번째</h4>단계
+        <div class="row mb-3 callout callout-info" v-show="main.picked !== '2'">
+          <div class="col-2 text-wrap">
+            <h4>재배단계</h4>
           </div>
           <div class="col">
             <app-row v-for="rowid in stepAList" :rowid="rowid" :main="main" @add-ghg="onAddGhg"></app-row>
           </div>
         </div>
-        <div class="row mb-3 callout callout-warning">
-          <div class="col-1 text-wrap">
-            <h4>두 번째</h4>
+        <div class="row mb-3 callout callout-warning" v-show="main.picked !== '2'">
+          <div class="col-2 text-wrap">
+            <h4>수확 후<br>관리단계</h4>
           </div>
           <div class="col">
             <app-row v-for="rowid in stepBList" :rowid="rowid" :main="main" @add-ghg="onAddGhg"></app-row>
           </div>
         </div>
         <div class="row mb-3 callout callout-danger">
-          <div class="col-1 text-wrap">
-            <h4>기타</h4>
+          <div class="col-2 text-wrap">
+            <h4>유통단계</h4>
           </div>
           <div class="col">
             <app-row v-for="rowid in stepCList" :rowid="rowid" :main="main" @add-ghg="onAddGhg"></app-row>

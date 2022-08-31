@@ -1,14 +1,11 @@
 import Big from './big.mjs';
 
 export default {
-  numberFormat(value) {
-    return this.comma(this.uncomma(value));
-  },
   comma(str) {
-    return String(str).replace(/(\d)(?=(?:\d{3})+(?!\d))/g, '$1,');
+    return this.uncomma(str).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
   },
   uncomma(str) {
-    return String(str).replace(/[^\d]+/g, '');
+    return String(str).replace(/[^0-9.]/g, '');
   },
   formValidThenShowResult(modalId, callback) {
     const forms = document.querySelectorAll('.needs-validation');
