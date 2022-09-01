@@ -48,8 +48,6 @@
         onGridData(main) {
           this.main = main;
         },
-        onAddGhg(rowValue) {
-        },
         onGhgResult(result) {
           this.ghg = result;
         },
@@ -90,7 +88,7 @@
             <h4>재배단계</h4>
           </div>
           <div class="col">
-            <app-row v-for="rowid in stepAList" :rowid="rowid" :main="main" @add-ghg="onAddGhg"></app-row>
+            <app-row v-for="rowid in stepAList" :rowid="rowid" :main="main"></app-row>
           </div>
         </div>
         <div class="row mb-3 callout callout-warning" v-show="main.picked !== '2'">
@@ -98,7 +96,7 @@
             <h4>수확 후<br>관리단계</h4>
           </div>
           <div class="col">
-            <app-row v-for="rowid in stepBList" :rowid="rowid" :main="main" @add-ghg="onAddGhg"></app-row>
+            <app-row v-for="rowid in stepBList" :rowid="rowid" :main="main"></app-row>
           </div>
         </div>
         <div class="row mb-3 callout callout-danger">
@@ -106,7 +104,7 @@
             <h4>유통단계</h4>
           </div>
           <div class="col">
-            <app-row v-for="rowid in stepCList" :rowid="rowid" :main="main" @add-ghg="onAddGhg"></app-row>
+            <app-row v-for="rowid in stepCList" :rowid="rowid" :main="main"></app-row>
           </div>
         </div>
       </section>

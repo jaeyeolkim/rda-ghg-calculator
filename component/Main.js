@@ -6,6 +6,7 @@ export default {
   data() {
     return {
       picked: '1',
+      isPickInit: false,
       items: getItems(),
       item: {},
       itemId: '',
@@ -17,18 +18,20 @@ export default {
     }
   },
   methods: {
-    onSelectedItemId() {
-      this.item = this.items.find(element => element.id === this.itemId);
-    },
-    onSelectedAreaId() {
-      this.area = this.areas.find(element => element.id === this.areaId);
+    init() {
+      this.item = {}
+      this.itemId = ''
+      this.itemInput = ' '
+      this.area = {}
+      this.areaId = ''
+      this.areaInput = ' '
     },
     setGridData() {
       this.$emit('grid-data', {
         picked: this.picked, 
         item: this.item,
         area: this.area,
-        valid: this.getValid()
+        valid: this.getValid(),
       });
     },
     getValid() {
@@ -67,10 +70,19 @@ export default {
     onAreaInputKeyUp(e) {
       this.areaInput = Utils.comma(this.areaInput);
     },
+    onSelectedItemId() {
+      this.item = this.items.find(element => element.id === this.itemId);
+      this.item.itemInput = this.itemInput;
+    },
+    onSelectedAreaId() {
+      this.area = this.areas.find(element => element.id === this.areaId);
+      this.area.areaInput = this.areaInput;
+    },
   },
   watch: {
     picked() {
       this.areaInput = this.picked === '2'? ' ': this.areaInput;
+      this.init();
       this.setGridData();
     },
     itemId() {

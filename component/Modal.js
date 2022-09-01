@@ -5,7 +5,7 @@ export default {
   template: `
   <div class="modal fade" id="resultModal" data-bs-keyboard="false" tabindex="-1"
     aria-labelledby="resultModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-width">
+    <div class="modal-dialog modal-lg" style="max-width: 600px">
       <div class="modal-content rounded">
         <div class="row">
           <div class="col-6 modal-bg text-center">
@@ -20,7 +20,7 @@ export default {
               <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body py-5">
-              <div class="modal-text">
+              <div class="modal-text" style="overflow-wrap: break-word;">
                 <h2 class="display-2 lead">{{ ghg }}</h2>
                 <span class="lead">kgCO<sub>2</sub></span>
               </div>
