@@ -90,7 +90,7 @@ const Items = [
 ];
 
 const gridFactors = [
-  { "id": '', "text": '선택', "emissionFactor": null }, 
+  { "id": '', "rowId": '', "text": '선택', "emissionFactor": null }, 
   { "id": 1, "rowId": 'A1', "text": '단일비료', "emissionFactor": 1.01},
   { "id": 2, "rowId": 'A1', "text": '복합비료', "emissionFactor": 1.27},
   { "id": 3, "rowId": 'A1', "text": '토양계량제', "emissionFactor": 0.206},
@@ -101,7 +101,7 @@ const gridFactors = [
   { "id": 8, "rowId": 'A2', "text": '살균제', "emissionFactor": 9.15},
   { "id": 9, "rowId": 'A2', "text": '살충제', "emissionFactor": 9.36},
   { "id": 10, "rowId": 'A2', "text": '생장조절제', "emissionFactor": 7.59},
-  { "id": 11, "rowId": 'A2', "text": '경유(고정)', "emissionFactor": 2.22145},
+  { "id": 11, "rowId": 'A3', "text": '경유(고정)', "emissionFactor": 2.22145},
   { "id": 12, "rowId": 'A3', "text": '경유(이동)', "emissionFactor": 2.2132},
   { "id": 13, "rowId": 'A3', "text": '실내등유(고정)', "emissionFactor": 2.21362},
   { "id": 14, "rowId": 'A3', "text": '실내등유(이동)', "emissionFactor": 2.20565},
@@ -128,37 +128,37 @@ const gridRows = [
   {
     rowId: 'A1', group: 'A', label: '비료', isLast: false, unit: 'kg',
     factorAvg: getGridFactorAvgByRowId('A1'),
-    options: getGridFactorsByRowId('A1')
+    rowItems: getGridFactorsByRowId('A1')
   },
   {
     rowId: 'A2', group: 'A', label: '작물보호제', isLast: false, unit: 'kg',
     factorAvg: getGridFactorAvgByRowId('A2'),
-    options: getGridFactorsByRowId('A2')
+    rowItems: getGridFactorsByRowId('A2')
   },
   {
     rowId: 'A3', group: 'A', label: '면세유류', isLast: false, unit: 'kg',
     factorAvg: getGridFactorAvgByRowId('A3'),
-    options: getGridFactorsByRowId('A3')
+    rowItems: getGridFactorsByRowId('A3')
   },
   {
     rowId: 'A4', group: 'A', label: '전기', isLast: true, unit: 'kWh',
     factorAvg: getGridFactorAvgByRowId('A4'),
-    options: getGridFactorsByRowId('A4')
+    rowItems: getGridFactorsByRowId('A4')
   },
   {
     rowId: 'B1', group: 'B', label: '전기', isLast: false, unit: 'kWh',
     factorAvg: getGridFactorAvgByRowId('B1'),
-    options: getGridFactorsByRowId('B1')
+    rowItems: getGridFactorsByRowId('B1')
   },
   {
     rowId: 'B2', group: 'B', label: '기타자재', isLast: true, unit: 'kg',
     factorAvg: getGridFactorAvgByRowId('B2'),
-    options: getGridFactorsByRowId('B2')
+    rowItems: getGridFactorsByRowId('B2')
   },
   {
     rowId: 'C1', group: 'C', label: '유통지역', isLast: true, unit: 'km',
     factorAvg: getGridFactorAvgByRowId('C1'),
-    options: getGridFactorsByRowId('C1')
+    rowItems: getGridFactorsByRowId('C1')
   },
 ];
 
@@ -169,28 +169,32 @@ export function getAreas() {
 
 export function getItems() {
   // 유통지역 rowValue 계산시에도 mainItemFactor 값이 undefined 되지 않도록 무의미한 값 1을 설정한다.
-  Items.forEach(element => element.factors['C1'] = 1);
+  Items.forEach(el => el.factors['C1'] = 1);
   return Items;
 }
 
 export function getRowIdsByGroup(group) {
-  return getRowsByGroup(group).map(element => element.rowId)
+  return getRowsByGroup(group).map(el => el.rowId)
 };
 export function getRowData(rowId) {
-  return gridRows.find(element => element.rowId === rowId)
+  return gridRows.find(el => el.rowId === rowId)
 };
 export function getAreaDistanceByRowAreaId(areaId) {
-  return Areas.find(element => element.id === areaId).distance
+  return Areas.find(el => el.id === areaId).distance
+};
+export function getGridEmissionFactorById(id) {
+  return gridFactors.find(el => el.id === id).emissionFactor
 };
 
 function getRowsByGroup(group) {
-  return gridRows.filter(element => element.group === group)
+  return gridRows.filter(el => el.group === group)
 }
 
 function getGridFactorsByRowId(rowId) {
-  return gridFactors.filter(element => element.rowId === rowId)
+  return gridFactors.filter(el => el.rowId === rowId 
+    || (rowId !== 'A4' && rowId !== 'B1' && rowId !== 'B2' && rowId !== 'C1' && el.rowId === ''))
 }
 
 function getGridFactorAvgByRowId(rowId) {
-  return gridFactorAvg.find(element => element.rowId === rowId).factorAvg
+  return gridFactorAvg.find(el => el.rowId === rowId).factorAvg
 }

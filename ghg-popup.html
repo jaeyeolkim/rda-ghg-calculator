@@ -8,7 +8,7 @@
   <link rel="stylesheet" href="./static/bootstrap-5.1.3/css/bootstrap.min.css">
   <link rel="stylesheet" href="./static/css/balloon.min.css">
   <link rel="stylesheet" href="./static/css/style.css">
-  <title>계산기</title><!-- 농산물 온실가스 배출량 산정 계산기 -->
+  <title>농산물 온실가스 배출량 산정 계산기</title>
 </head>
 
 <body>
@@ -63,7 +63,10 @@
   <div id="app" class="app-container container-xl p-0 border border-light border-top-0">
     <nav class="navbar sticky-top navbar-light bg-light">
       <div class="container-fluid container-xl">
-        <a class="navbar-brand" href="/">농산물 온실가스 배출량 산정 계산기</a>
+        <a class="navbar-brand" href="/">
+          <img src="./static/assets/img/rda_logo.png">
+          <!-- <span class="navbar-text">농산물 온실가스 배출량 산정 계산기</span> -->
+        </a>
         <button type="button" class="btn-close" @click="onClose" aria-label="👋 창 닫기"
           data-balloon-pos="down-right"></button>
       </div>
@@ -108,6 +111,9 @@
           </div>
         </div>
       </section>
+      <footer class="py-1 my-1">
+        <p class="text-center text-muted">COPYRIGHT ⓒ 2019 RURAL DEVELOPMENT ADMINISTRATION. ALL RIGHTS RESERVED</p>
+      </footer>
     </form>
   </div>
 </body>
