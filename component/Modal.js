@@ -11,7 +11,8 @@ export default {
           <div class="col-6 modal-bg text-center">
             <div class="modal-custom-header"></div>
             <div class="modal-body py-5">
-              <h2 class="display-1"><i class="fa-solid fa-temperature-three-quarters"></i></h2>
+              <!-- <h2 class="display-1"><i class="fa-solid fa-temperature-three-quarters"></i></h2> -->
+              <h2 class="display-1"><i class="fa-solid fa-paw"></i></h2>
               <span class="lead">배출량 계산 결과</span>
             </div>
           </div>
