@@ -131,7 +131,7 @@ export default {
   </div>
   <div class="callout callout-default">
     <div class="row mb-1">
-      <div class="col-5">
+      <div class="col-12 col-sm-5">
         <div class="form-floating">
           <select class="form-select border-secondary" id="item" aria-label="select" v-model="itemId">
             <option v-for="item in items" :key="item.id" :value="item.id">{{ item.text }}</option>
@@ -139,7 +139,7 @@ export default {
           <label for="item">재배작물</label>
         </div>
       </div>
-      <div class="col ps-0">
+      <div class="col-8 col-sm-5 ps-sm-0">
         <div class="form-floating">
           <input type="text" class="form-control border-secondary" id="itemInput" v-model="itemInput"
             placeholder="input" :disabled="itemId === ''" 
@@ -147,7 +147,7 @@ export default {
           <label for="itemInput">전체 생산량</label>
         </div>
       </div>
-      <div class="col-2 ps-0">
+      <div class="col-4 col-sm-2 ps-0">
         <div class="form-floating">
           <select class="form-select border-secondary" id="itemUnit" v-model="itemUnit" aria-label="select" :disabled="itemId === ''">
             <option value="kg">kg</option>
@@ -158,7 +158,7 @@ export default {
       </div>
     </div>
     <div class="row">
-      <div class="col-5">
+      <div class="col-12 col-sm-5">
         <div class="form-floating">
           <select class="form-select border-secondary" id="area" aria-label="select" v-model="areaId">
             <option v-for="area in areas" :key="area.id" :value="area.id">{{ area.text }}</option>
@@ -166,7 +166,7 @@ export default {
           <label for="area">재배지역</label>
         </div>
       </div>
-      <div class="col ps-0">
+      <div class="col-8 col-sm-5 ps-sm-0">
         <div class="form-floating">
           <input type="text" class="form-control border-secondary" id="areaInput" v-model="areaInput"
             placeholder="input" :disabled="picked === '2' || areaId === ''"
@@ -174,7 +174,7 @@ export default {
           <label for="areaInput">재배면적</label>
         </div>
       </div>
-      <div class="col-2 ps-0">
+      <div class="col-4 col-sm-2 ps-0">
         <div class="form-floating">
           <select class="form-select border-secondary" id="areaUnit" v-model="areaUnit" aria-label="select" :disabled="areaId === ''">
             <option value="m">m²</option>

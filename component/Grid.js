@@ -83,14 +83,14 @@ export default {
   },
   template: `
   <div class="row" :class="{ 'mb-1': !rowData.isLast }">
-    <div class="col-3">
+    <div class="col-12 col-sm-3">
       <label v-if="main.picked !== '3'" class="input-group-text bg-light" for="">{{ rowData.label }}</label>
       <select v-if="main.picked === '3'" class="form-select" id="rowItem" v-model="rowItem" :disabled="disabled" required>
         <option v-for="item in rowData.rowItems" :key="item.id" :value="item.id">{{ item.text }}</option>
       </select>
       <div v-if="main.picked === '3'" class="invalid-feedback">필수 선택입니다.</div>
     </div>
-    <div class="col-6 ps-0">
+    <div class="col-12 col-sm-6 ps-sm-0">
       <div class="input-group">
         <select v-if="rowid === 'C1'" class="form-select" id="distance" v-model="distance" :disabled="disabled" required>
           <option v-for="area in areas" :key="area.id" :value="area.id">{{ area.text }}</option>
@@ -109,7 +109,7 @@ export default {
         <div v-if="rowid === 'C1'" class="invalid-feedback">필수 선택입니다.</div>
       </div>
     </div>
-    <div class="col-3 p-0">
+    <div class="col-12 col-sm-3 p-sm-0">
       <div class="input-group">
         <input type="text" aria-label="Last name" class="form-control text-end" :id="rowid + '_rowValue'" name="rowValue" v-model="rowValue" readonly>
         <span class="input-group-text fw-lighter p-2 bg-light" style="width: 4em; font-size: 0.9em;">kgCO<sub>2</sub></span>
