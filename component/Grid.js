@@ -58,7 +58,10 @@ export default {
     },
     onMainChanged() {
       this.disabled = !this.main.valid
-      this.mainItemFactor = this.main.item.factors ? this.main.item.factors[this.rowid]: null;
+      if (this.rowid !== 'B1') {
+        const mainItemFactor = this.main.item.factors ? this.main.item.factors[this.rowid]: null;
+        this.mainItemFactor = mainItemFactor ? Utils.comma(new Big(mainItemFactor).round(3)): null;
+      }
     },
     onDistanceSelected() {
       this.addValue = this.myAreaDistance[this.distance]
