@@ -99,7 +99,7 @@ export default {
           <option v-for="area in areas" :key="area.id" :value="area.id">{{ area.text }}</option>
         </select>
         <input v-else type="text" class="form-control text-end" placeholder="" 
-         :class="{ 'bg-warning bg-opacity-10': mainItemFactor, 'bg-white border-0': rowid === 'B1' }"
+         :class="{ 'bg-warning bg-opacity-10': true, 'bg-white border-0': rowid === 'B1' }"
          :id="rowid + '_mainItemFactor'" v-model="mainItemFactor" readonly>
 
         <span v-show="rowid !== 'C1'" class="badge bg-white px-1 pt-3 text-secondary" :style="{width: + (rowid === 'B1'? 21: 20) +'px'}">
