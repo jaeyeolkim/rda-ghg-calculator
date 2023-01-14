@@ -21,7 +21,7 @@ export default {
             const formData = new FormData(form)
             let ghg = 0;
             for (let [key, val] of formData.entries()) {
-              if (key === 'rowValue' && val) {
+              if ((key === 'rowValue' || key === 'ghgKgCo2') && val) {
                 ghg = new Big(Number(ghg)).plus(Number(_this.uncomma(val)))
               }
             }
